@@ -29,21 +29,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Custom JS to handle server response -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-
-            fetch(`http://localhost:3000/signup?code=${code}`) // Replace with your server endpoint
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data); // Handle the response data
-                    // You can update the DOM based on the response here
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    </script>
 </body>
 </html>
