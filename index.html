@@ -87,9 +87,8 @@
             if (role === "ranked") {
                 // Start the Discord OAuth process for Ranked players
                 const clientId = '1284153306146672782';  // Replace with your Discord client ID
-                const redirectUri = encodeURIComponent(window.location.origin + '/discord/callback');
+                const redirectUri = encodeURIComponent(window.location.origin + '/signup');
                 const scope = 'identify';
-                const oauthUrl = `https://discord.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
 
                 // Save form data temporarily before redirecting to OAuth
                 const signupData = {
@@ -100,7 +99,9 @@
                     lane: document.getElementById('lane').value,
                     role: role
                 };
-                sessionStorage.setItem('signupData', JSON.stringify(signupData));
+
+                const queryParams = new URLSearchParams(signupData).toString();
+                const oauthUrl = `https://discord.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&${queryParams}`;
 
                 window.location.href = oauthUrl;
             } else {
@@ -108,6 +109,7 @@
                 handleCasualSignup();
             }
         });
+
 
         function handleCasualSignup() {
             const email = document.getElementById('email').value;
