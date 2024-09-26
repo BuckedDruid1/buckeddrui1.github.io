@@ -86,9 +86,10 @@
             const role = document.getElementById("role").value;
             if (role === "ranked") {
                 // Start the Discord OAuth process for Ranked players
-                const clientId = '1284153306146672782';  // Replace with your Discord client ID
-                const redirectUri = encodeURIComponent(window.location.origin + '/signup');
-                const scope = 'identify';
+                const clientId = '1284153306146672782';
+                const responseType = 'code';
+                const redirectUri = encodeURIComponent('https://buckeddruid1.github.io/signup');
+                const scope = 'identify connections';
 
                 // Save form data temporarily before redirecting to OAuth
                 const signupData = {
@@ -101,7 +102,7 @@
                 };
 
                 const queryParams = new URLSearchParams(signupData).toString();
-                const oauthUrl = `https://discord.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&${queryParams}`;
+                const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scope)}`;
 
                 window.location.href = oauthUrl;
             } else {
