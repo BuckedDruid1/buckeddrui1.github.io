@@ -33,7 +33,10 @@
     <!-- Custom JS to handle server response -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('http://localhost:3000') // Replace with your server endpoint
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+
+            fetch(`http://localhost:3000/signup?code=${code}`) // Replace with your server endpoint
                 .then(response => response.json())
                 .then(data => {
                     console.log(data); // Handle the response data
