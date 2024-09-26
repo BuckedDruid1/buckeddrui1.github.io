@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Lounge Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #0072bb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #005f8d;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Up for League Lounge</h1>
+        <form id="signup-form">
+            <label for="username">Username</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="password">Password</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+
+            <label for="region">Region</label><br>
+            <select id="region" name="region" required>
+                <option value="euw">EUW</option>
+                <option value="na">NA</option>
+                <option value="eune">EUNE</option>
+                <option value="ru">RU</option>
+            </select><br><br>
+
+            <label for="lane">Lane</label><br>
+            <select id="lane" name="lane" required>
+                <option value="top">Top</option>
+                <option value="mid">Mid</option>
+                <option value="adc">ADC</option>
+                <option value="jungle">Jungle</option>
+                <option value="support">Support</option>
+            </select><br><br>
+
+            <label for="role">Role</label><br>
+            <select id="role" name="role" required>
+                <option value="casual">Casual</option>
+                <option value="ranked">Ranked</option>
+            </select><br><br>
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const role = document.getElementById("role").value;
+            if (role === "ranked") {
+                // Start the Discord OAuth process for Ranked players
+                const clientId = '1284153306146672782';  // Replace with your Discord client ID
+                const redirectUri = encodeURIComponent(window.location.origin + '/discord/callback');
+                const scope = 'identify';
+                const oauthUrl = `https://discord.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+
+                // Save form data temporarily before redirecting to OAuth
+                const signupData = {
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    username: document.getElementById('username').value,
+                    region: document.getElementById('region').value,
+                    lane: document.getElementById('lane').value,
+                    role: role
+                };
+                sessionStorage.setItem('signupData', JSON.stringify(signupData));
+
+                window.location.href = oauthUrl;
+            } else {
+                // Handle casual user signup
+                handleCasualSignup();
+            }
+        });
+
+        function handleCasualSignup() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
+            const region = document.getElementById('region').value;
+            const lane = document.getElementById('lane').value;
+            const role = document.getElementById('role').value;
+
+            // Send casual user data to backend
+            fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, username, region, lane, role })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Signup success:', data);
+                })
+                .catch(error => console.error('Signup error:', error));
+        }
+    </script>
+</body>
+</html>
