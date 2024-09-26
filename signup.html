@@ -31,19 +31,20 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
         <!-- Custom JS to handle server response -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
 
-            fetch(`https://buckeddruid1.github.io/signup?code=${code}`) // Replace with your server endpoint
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data); // Handle the response data
-                    // You can update the DOM based on the response here
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    </script>
+        fetch(`http://localhost:3000/signup?code=${code}`) // Replace with your server endpoint
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Handle the response data
+                // You can update the DOM based on the response here
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
 </body>
 </html>
