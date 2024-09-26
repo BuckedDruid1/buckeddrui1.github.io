@@ -36,11 +36,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
 
-        fetch(`http://localhost:3000/signup?code=${code}`) // Replace with your server endpoint
+        fetch(`http://localhost:3000/signup?code=${code}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Handle the response data
-                // You can update the DOM based on the response here
+                console.log(data);
             })
             .catch(error => console.error('Error:', error));
     });
