@@ -30,20 +30,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <!-- Custom JS to handle server response -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
+    <!-- Custom JS to handle server response -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
 
-        fetch(`http://localhost:3000/signup?code=${code}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
+            fetch(`http://localhost:3000/signup?code=${code}`, {
+                mode: 'no-cors'
+            })
+            .then(response => {
+                // Since no-cors mode is used, you won't be able to access the response data
+                console.log('Request sent');
             })
             .catch(error => console.error('Error:', error));
-    });
-</script>
-
+        });
+    </script>
 </body>
 </html>
