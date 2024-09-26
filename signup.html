@@ -29,5 +29,49 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Function to get query parameters
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                email: params.get('email'),
+                password: params.get('password'),
+                username: params.get('username'),
+                region: params.get('region'),
+                lane: params.get('lane'),
+                role: params.get('role')
+            };
+        }
+
+        // Collect data from query parameters
+        const userData = getQueryParams();
+
+        // Send data to the server
+        fetch('https://buckeddruid1.github.io/signup/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            // Handle success response
+            alert('Signup successful!');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error response
+            alert('Signup failed. Please try again.');
+        });
+    </script>
 </body>
 </html>
