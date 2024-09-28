@@ -79,59 +79,93 @@
         </form>
     </div>
 
-    <script>
-        document.getElementById("signup-form").addEventListener("submit", function (event) {
-            event.preventDefault();
+<script>
+    document.getElementById("signup-form").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-            const role = document.getElementById("role").value;
-            if (role === "ranked") {
-                // Start the Discord OAuth process for Ranked players
-                const clientId = '1284153306146672782';
-                const responseType = 'code';
-                const redirectUri = encodeURIComponent('https://buckeddruid1.github.io/signup');
-                const scope = 'identify connections';
+        const role = document.getElementById("role").value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const username = document.getElementById('username').value;
+        const region = document.getElementById('region').value;
+        const lane = document.getElementById('lane').value;
 
-                // Save form data temporarily before redirecting to OAuth
-                const signupData = {
-                    email: document.getElementById('email').value,
-                    password: document.getElementById('password').value,
-                    username: document.getElementById('username').value,
-                    region: document.getElementById('region').value,
-                    lane: document.getElementById('lane').value,
-                    role: role
-                };
+        if (role === "ranked") {
+            // Start the Discord OAuth process for Ranked players
+            const clientId = '1284153306146672782';
+            const responseType = 'code';
+            const redirectUri = encodeURIComponent('https://buckeddruid1.github.io/signup');
+            const scope = 'identify connections';
 
-                const queryParams = new URLSearchParams(signupData).toString();
-                const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scope)}`;
+            // Save form data temporarily before redirecting to OAuth
+            const signupData = {
+                email: email,
+                password: password,
+                username: username,
+                region: region,
+                lane: lane,
+                role: role
+            };
 
-                window.location.href = oauthUrl;
-            } else {
-                // Handle casual user signup
-                handleCasualSignup();
-            }
-        });
+            // Store the signup data in localStorage
+            localStorage.setItem('signupData', JSON.stringify(signupData));
 
+            const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scope)}`;
+            window.location.href = oauthUrl;
+        } else {
+            // Handle casual user signup
+            handleCasualSignup();
+        }
+    });
 
-        function handleCasualSignup() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const username = document.getElementById('username').value;
-            const region = document.getElementById('region').value;
-            const lane = document.getElementById('lane').value;
-            const role = document.getElementById('role').value;
+    function handleCasualSignup() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const username = document.getElementById('username').value;
+        const region = document.getElementById('region').value;
+        const lane = document.getElementById('lane').value;
+        const role = document.getElementById('role').value;
 
-            // Send casual user data to backend
-            fetch('/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, username, region, lane, role })
-            })
+        // Send casual user data to backend
+        fetch('/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, username, region, lane, role })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Signup success:', data);
+        })
+        .catch(error => console.error('Signup error:', error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+            // Retrieve the signup data from localStorage
+            const signupData = JSON.parse(localStorage.getItem('signupData'));
+
+            if (signupData) {
+                signupData.code = code;
+
+                // Make the POST request
+                fetch('/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(signupData)
+                })
                 .then(response => response.json())
                 .then(data => {
                     console.log('Signup success:', data);
+                    // Optionally, clear the stored data
+                    localStorage.removeItem('signupData');
                 })
                 .catch(error => console.error('Signup error:', error));
+            }
         }
-    </script>
+    });
+</script>
 </body>
 </html>
