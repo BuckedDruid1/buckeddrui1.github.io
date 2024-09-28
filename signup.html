@@ -41,8 +41,8 @@
             const formData = new URLSearchParams();
             formData.append('code', code);
 
-            // Make the POST request
-            fetch('/signup', {
+            // Make the POST request to your new server endpoint
+            fetch('https://buckeddruid1.github.io/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
@@ -55,6 +55,7 @@
         }
     });
 </script>
+
 
 </body>
 </html>
